@@ -14,9 +14,17 @@ GitHub username:
 </ul>
 <script>
     function loadRepos() {
-        $.get("https://api.github.com/users/testnakov/repos").then(display);
+        let username = document.getElementById('username').value;
+        let repos = $.get(`https://api.github.com/users/${username}/repos`);
+        let output = document.getElementById('repos');
+        if (repos.status !== 200){
+            output.innerHTML = '<li>Error</li>';
+        }
+        else{
+            repos.then(display);
+        }
         function display(repos){
-            let output = document.getElementById('repos');
+            output.innerHTML = "";
             for (let repo of repos) {
                 output.innerHTML += `<li><a href="${repo.html_url}">${repo.name}</a></li>`;
             }
